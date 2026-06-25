@@ -1,0 +1,73 @@
+# Minimal Airflow stack for the iris_pipeline DAG.
+#
+# Runs identically on macOS, Linux and Windows (Docker Desktop / WSL2)
+# Airflow runs inside a Linux container.
+#
+# Two containers only:
+#   postgres  - metadata database (reliable; avoids SQLite locking issues)
+#   airflow   - runs db migrate + scheduler + webserver in one container
+#
+# Usage (from this directory, day1/Session_4):
+#   docker compose up --build
+#   open http://localhost:8080   (login: admin / admin)
+#   trigger the "iris_pipeline" DAG from the UI
+#
+#   docker compose down          # stop
+#   docker compose down -v       # stop and wipe the database/logs
+
+x-airflow-env: &airflow-env
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor
+  AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+  AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+  # Point Airflow at the committed DAG. The path mirrors the repo layout so the
+  # DAG's own `pathlib.Path(__file__)...` lookup of Session_1/iris.csv resolves.
+  AIRFLOW__CORE__DAGS_FOLDER: /opt/project/day1/Session_4/airflow_home/dags
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  airflow:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *airflow-env
+    ports:
+      - "8080:8080"
+    volumes:
+      # DAG code (read-write so Airflow can write its parse cache).
+      - ./airflow_home/dags:/opt/project/day1/Session_4/airflow_home/dags
+      # The dataset, mounted at the exact path the DAG computes (4 levels up).
+      - ../Session_1/iris.csv:/opt/project/day1/Session_1/iris.csv:ro
+      # Persist task logs so they survive restarts and are viewable in the UI.
+      - airflow-logs:/opt/airflow/logs
+    command:
+      - bash
+      - -c
+      - |
+        airflow db migrate
+        airflow users create \
+          --username admin --password admin \
+          --firstname Admin --lastname User \
+          --role Admin --email admin@example.com || true
+        airflow scheduler &
+        exec airflow webserver
+    restart: unless-stopped
+
+volumes:
+  postgres-db:
+  airflow-logs:

@@ -1,0 +1,4 @@
+# Keep the build context tiny: the image only needs requirements.txt.
+# airflow_home (db, logs, config) and notebooks are mounted/irrelevant at build time.
+airflow_home/
+*.ipynb

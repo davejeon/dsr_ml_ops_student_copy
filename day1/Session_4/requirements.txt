@@ -1,0 +1,5 @@
+# Extra Python libs the iris_pipeline DAG needs on top of Airflow.
+# Pinned to match the course venv so every student gets identical results.
+pandas==2.3.3
+scikit-learn==1.9.0
+numpy==2.5.0

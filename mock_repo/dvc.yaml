@@ -1,0 +1,21 @@
+# DVC pipeline — versions data and stages so `dvc repro` rebuilds end-to-end.
+# In a real repo, `data/raw/customers.csv` would be tracked via `dvc add`.
+
+stages:
+  validate:
+    cmd: python -m churn.data.validate data/raw/customers.csv
+    deps:
+      - data/raw/customers.csv
+      - src/churn/data/validate.py
+
+  train:
+    cmd: python -m churn.models.train
+    deps:
+      - data/raw/customers.csv
+      - src/churn/models/train.py
+      - src/churn/features/build.py
+    outs:
+      - model.joblib
+    metrics:
+      - metrics.json:
+          cache: false

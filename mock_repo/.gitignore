@@ -1,0 +1,15 @@
+# trained models, data, experiment store
+model.joblib
+metrics.json
+mlruns/
+data/raw/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
