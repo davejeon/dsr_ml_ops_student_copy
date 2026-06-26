@@ -8,11 +8,7 @@ Hands-on CI/CD for the iris service built in Sessions 1 and 2.
 
 ---
 
-## Files
-
-Two tiers — start with the basic versions, refer to the `_advanced` versions once comfortable.
-
-### Basic (start here)
+### Start
 
 | File | What it does |
 |------|-------------|
@@ -50,9 +46,7 @@ If the service is not running, integration tests are **skipped** (not failed).
 
 ```bash
 # Start the service first, then:
-pytest day2/Session_3/ -v --ignore=day2/Session_3/test_data.py \
-                           --ignore=day2/Session_3/test_model.py \
-                           --ignore=day2/Session_3/test_service.py
+pytest day2/Session_3/ -v
 ```
 
 ---
