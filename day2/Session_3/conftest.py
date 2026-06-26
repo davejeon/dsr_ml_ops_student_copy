@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-# ── Paths ─────────────────────────────────────────────────────────────────────
+#  Paths 
 REPO_ROOT    = pathlib.Path(__file__).resolve().parent.parent.parent
 DATA_PATH    = REPO_ROOT / "day1" / "Session_1" / "iris.csv"
 SESSION_1    = REPO_ROOT / "day2" / "Session_1"
@@ -29,7 +29,7 @@ TARGET_COL   = "class"
 CLASSES      = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]
 
 
-# ── Data fixtures ──────────────────────────────────────────────────────────────
+# Data fixtures 
 
 @pytest.fixture(scope="session")
 def iris_df():
@@ -56,7 +56,7 @@ def train_test_data(iris_X_y):
     return X_train, X_test, y_train, y_test, le
 
 
-# ── Model fixtures ─────────────────────────────────────────────────────────────
+#  Model fixtures ─────────────────────────────────────────────────────────────
 
 @pytest.fixture(scope="session")
 def trained_model():
