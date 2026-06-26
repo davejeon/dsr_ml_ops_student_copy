@@ -22,15 +22,6 @@ Two tiers — start with the basic versions, refer to the `_advanced` versions o
 | `test_service.py` | 3 tests: health check, correct prediction, bad input rejected |
 | `ml-ci.yml` | Single-job GitHub Actions workflow: install → train → test |
 
-### Advanced (for reference)
-
-| File | What it adds |
-|------|-------------|
-| `test_data_advanced.py` | Range checks, duplicate detection, statistical properties, per-class balance |
-| `test_model_advanced.py` | Per-class recall, probability sanity, invariance / perturbation tests |
-| `test_service_advanced.py` | Latency SLO, all three canonical predictions, full validation edge cases |
-| `ml-ci_advanced.yml` | Two-job pipeline: CI job + separate integration job (starts service) |
-
 ---
 
 ## Running the tests
@@ -59,9 +50,9 @@ If the service is not running, integration tests are **skipped** (not failed).
 
 ```bash
 # Start the service first, then:
-pytest day2/Session_3/ -v --ignore=day2/Session_3/test_data_advanced.py \
-                           --ignore=day2/Session_3/test_model_advanced.py \
-                           --ignore=day2/Session_3/test_service_advanced.py
+pytest day2/Session_3/ -v --ignore=day2/Session_3/test_data.py \
+                           --ignore=day2/Session_3/test_model.py \
+                           --ignore=day2/Session_3/test_service.py
 ```
 
 ---
