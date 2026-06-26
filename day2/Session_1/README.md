@@ -174,12 +174,3 @@ FastAPI generates interactive API documentation at no extra cost:
 | Returning per-class probabilities | `service.py` — `predict_proba` |
 
 ---
-
-## Next steps
-
-- **Containerise**: add a `Dockerfile` (see section 5.5 of the materials) and
-  run `docker build -t iris-svc:1.0 . && docker run -p 8000:8000 iris-svc:1.0`.
-- **Add `/metrics`**: expose request count and latency in Prometheus format
-  using the `prometheus-fastapi-instrumentator` package.
-- **Use MLflow**: replace `joblib.load` with `mlflow.pyfunc.load_model` to load
-  directly from a run URI and get schema validation for free (section 5.2).

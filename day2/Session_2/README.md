@@ -80,13 +80,3 @@ docker build -f day2/Session_2/Dockerfile -t iris-svc:1.0 .
 ```
 
 ---
-
-## Next steps
-
-- Add a **multi-stage build** (`Dockerfile.multistage` in the materials) to shrink
-  the image from ~900 MB to ~250 MB.
-- Add a `/metrics` endpoint with `prometheus-fastapi-instrumentator` and scrape
-  it from a Prometheus container defined in `docker-compose.yml`.
-- Push to a registry: `docker tag iris-svc:1.0 ghcr.io/<user>/iris-svc:1.0 && docker push`.
-- Replace `joblib.load` with `mlflow.pyfunc.load_model` and pass the run URI via
-  an environment variable — the image then works for any registered model version.
