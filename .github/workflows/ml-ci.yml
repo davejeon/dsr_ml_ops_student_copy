@@ -1,0 +1,53 @@
+# ml-ci.yml — Basic ML CI pipeline for the iris classifier.
+#
+# This file is placed in day2/Session_3/ for learning purposes.
+# To use it in a real repo, copy it to .github/workflows/:
+#
+#   mkdir -p .github/workflows
+#   cp day2/Session_3/ml-ci.yml .github/workflows/ml-ci.yml
+#
+#  What this does
+#
+#  On every push and pull request:
+#    1. Install dependencies
+#    2. Train the model (so we test what CI actually produces)
+#    3. Run data tests   — is the training data valid?
+#    4. Run model tests  — is the trained model good enough to deploy?
+#
+#  That's it. No Docker, no deployment, no complexity.
+#  See ml-ci_advanced.yml for a version that also runs integration tests.
+
+name: ml-ci
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  ci:
+    name: Data & model tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Train model
+        run: python day2/Session_1/train.py
+
+      - name: Run data tests
+        run: pytest day2/Session_3/test_data.py -v
+
+      - name: Run model tests
+        run: pytest day2/Session_3/test_model.py -v
